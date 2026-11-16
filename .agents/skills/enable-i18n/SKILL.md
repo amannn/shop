@@ -115,7 +115,7 @@ Move the read into the smallest Suspense boundary that needs it; `next build --d
 
 ### D. `setRequestLocale` is not used
 
-next-intl docs sometimes show `setRequestLocale(locale)` calls in layouts/pages. **Don't add them under cacheComponents.** That helper writes to a request-scoped store and forces dynamic rendering — it defeats the cache. The rootParams + request-config pattern below makes it unnecessary because the resolved locale is already a cache key.
+next-intl docs sometimes show `setRequestLocale(locale)` calls in layouts/pages. **Don't add them under cacheComponents.** That helper hands the locale to next-intl when the request config cannot read it statically. The rootParams + request-config pattern below makes it unnecessary because the resolved locale is already a cache key.
 
 ### E. Keep the template `Link`
 
