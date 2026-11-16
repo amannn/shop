@@ -212,14 +212,17 @@ const messageLoaders: Record<string, () => Promise<{ default: typeof enMessages 
 
 // Read the root param, not next-intl's request locale, which reads the
 // `x-next-intl-locale` request header and fails the layout's static shell.
-export default getRequestConfig(async () => {
-  const requested = await getLocale();
+// An explicit `locale` wins: root params are unavailable in Server Actions and Route Handlers.
+export default getRequestConfig(async ({ locale: explicitLocale }) => {
+  const requested = explicitLocale ?? (await getLocale());
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const loader = messageLoaders[locale];
   const messages = (await loader()).default as typeof enMessages;
   return { locale, messages };
 });
 ```
+
+Server Actions and Route Handlers translate with `getTranslations({ locale })`, passing the locale they validated at the boundary; the request config then skips the root param.
 
 ### Step 5: Extend `proxy.ts`
 

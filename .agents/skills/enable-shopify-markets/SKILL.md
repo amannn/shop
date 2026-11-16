@@ -254,9 +254,9 @@ export async function getLocale(): Promise<Locale> {
 }
 ```
 
-Create or update `lib/i18n/request/server.ts` to call `getLocale()` and load the matching messages. Do not resolve locale by reading cookies or request headers from a cached component. The proxy owns request negotiation; React receives the validated internal route param. Set `<html lang>` and UI formatting from that locale.
+Create or update `lib/i18n/request/server.ts` to load the matching messages for the explicit `locale` it receives, or for `getLocale()` when none is passed. Do not resolve locale by reading cookies or request headers from a cached component. The proxy owns request negotiation; React receives the validated internal route param. Set `<html lang>` and UI formatting from that locale.
 
-Do not call this root-param getter from Route Handlers or Server Actions: use route context or explicit request/action inputs and validate them at the boundary. Keep API, OAuth, markdown, and chat handling outside the Server Component request config.
+Do not call this root-param getter from Route Handlers or Server Actions: use route context or explicit request/action inputs, validate them at the boundary, and translate with `getTranslations({ locale })`. Keep API, OAuth, markdown, and chat handling outside the Server Component request config.
 
 ## 7. Extend the proxy
 
